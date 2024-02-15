@@ -41,15 +41,14 @@ cover/
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
 
 # Environments
-.env
+.prod.env
+.dev.env
 .venv
 env/
 venv/
