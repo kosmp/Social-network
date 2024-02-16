@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.2.0
+    command: --default-authentication-plugin=caching_sha2_password
+    volumes:
+      - mysql-data:/var/lib/db/mysql/data
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - '${MYSQL_PORT}:3306'
+    init: true
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+  innoter-app:
+    container_name: innoter-app
+    build:
+      context: .
+    command: sh scripts/entry.sh
+    env_file:
+      - .dev.env
+    volumes:
+      - .:/home/appuser
+    ports:
+      - ${APP_PORT}:8000
+    init: true
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  mysql-data:
+    driver: local
