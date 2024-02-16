@@ -13,7 +13,7 @@ services:
       - '${MYSQL_PORT}:3306'
     init: true
     healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "user", "-p12345678"]
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
       timeout: 5s
       retries: 5
       start_period: 5s
