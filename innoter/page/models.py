@@ -18,6 +18,6 @@ class Page(models.Model):
         ordering = ["updated_at"]
 
 
-class Followers(models.Model):
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="follows")
+class Follower(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
     user = models.UUIDField(null=False)
