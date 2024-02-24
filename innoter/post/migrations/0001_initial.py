@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ),
                 ("user_id", models.UUIDField()),
                 (
-                    "post",
+                    "post_id",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE, to="post.post"
                     ),

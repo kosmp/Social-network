@@ -19,5 +19,5 @@ class Page(models.Model):
 
 
 class Follower(models.Model):
-    page = models.ForeignKey(Page, on_delete=models.CASCADE)
-    user = models.UUIDField(null=False)
+    page_id = models.ForeignKey(Page, on_delete=models.CASCADE)
+    user_id = models.UUIDField(null=False)

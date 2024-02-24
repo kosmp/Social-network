@@ -59,9 +59,9 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("user", models.UUIDField()),
+                ("user_id", models.UUIDField()),
                 (
-                    "page",
+                    "page_id",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE, to="page.page"
                     ),
