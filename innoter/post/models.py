@@ -8,7 +8,6 @@ class Post(models.Model):
     reply_to_post_id = models.ForeignKey(
         "self", on_delete=models.SET_NULL, null=True, related_name="replies", blank=True
     )
-    likes = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

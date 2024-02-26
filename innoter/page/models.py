@@ -8,7 +8,6 @@ class Page(models.Model):
     user_id = models.UUIDField(null=False)
     image_url = models.URLField(default=None, blank=True, null=True)
     tags = models.ManyToManyField(Tag)
-    followers = models.PositiveIntegerField(default=0)
     is_blocked = models.BooleanField(default=False)
     unblock_date = models.DateTimeField(default=None, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
