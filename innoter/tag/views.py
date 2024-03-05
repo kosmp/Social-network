@@ -7,7 +7,9 @@ from .models import Tag
 from .serializers import TagSerializer
 
 
-class TagViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class TagViewSet(
+    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
