@@ -1,4 +1,5 @@
 from page.models import Follower
+from page.utils import get_user_info
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,7 +7,6 @@ from rest_framework.viewsets import ModelViewSet
 
 from .models import Like, Post
 from .serializers import PostSerializer
-from .utils import get_user_info
 
 
 class PostViewSet(ModelViewSet):
