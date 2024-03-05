@@ -5,8 +5,8 @@ from tag.models import Tag
 class Page(models.Model):
     name = models.CharField(max_length=50, null=False, unique=True)
     description = models.CharField(max_length=300, default=None, blank=True, null=True)
-    user_id = models.UUIDField(null=False)
-    owner_group_id = models.UUIDField(null=False)
+    user_id = models.UUIDField(null=True, blank=True)
+    owner_group_id = models.UUIDField(null=True, blank=True)
     image_url = models.URLField(default=None, blank=True, null=True)
     tags = models.ManyToManyField(Tag)
     is_blocked = models.BooleanField(default=False)
