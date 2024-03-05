@@ -7,4 +7,4 @@ class PageSerializer(ModelSerializer):
     class Meta:
         model = Page
         fields = "__all__"
-        read_only_fields = ("user_id",)
+        read_only_fields = ("user_id", "owner_group_id")
