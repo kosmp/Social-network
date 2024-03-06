@@ -77,7 +77,7 @@ class PageViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=["patch"],
-        permission_classes=[IsAuthenticated, IsAdminOrIsModeratorOfThePageOwner],
+        permission_classes=[IsAdminOrIsModeratorOfThePageOwner],
     )
     def block(self, request, pk=None):
         page = self.get_object()
