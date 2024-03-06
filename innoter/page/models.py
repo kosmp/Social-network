@@ -1,4 +1,5 @@
 from django.db import models
+from page.managers import FollowerManager
 from tag.models import Tag
 
 
@@ -21,3 +22,5 @@ class Page(models.Model):
 class Follower(models.Model):
     page_id = models.ForeignKey(Page, on_delete=models.CASCADE)
     user_id = models.UUIDField(null=False)
+
+    objects = FollowerManager()
