@@ -25,11 +25,11 @@ class PageViewSet(ModelViewSet):
 
     permission_classes_by_action = {
         "create": [IsAuthenticated],
-        "destroy": [IsAuthenticated, IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
+        "destroy": [IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
         "retrieve": [IsAuthenticated],
         "list": [IsAuthenticated],
-        "update": [IsAuthenticated, IsPageOwner],
-        "partial_update": [IsAuthenticated, IsPageOwner],
+        "update": [IsPageOwner],
+        "partial_update": [IsPageOwner],
     }
 
     def perform_create(self, serializer):
