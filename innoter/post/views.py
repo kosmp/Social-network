@@ -17,23 +17,25 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
     @action(detail=True, methods=["patch"])
     def like(self, request, pk=None):
         post = self.get_object()
-        user_id = get_user_info(self.request).get("id")
+        user_id = get_user_info(self.request).get("user_id", None)
         response = None
         if Like.objects.like_post(post, user_id):
-            response = Response({"message": f"You like post {post.id}."})
+            response = Response({"message": f"You've liked post {post.id}."})
         else:
-            response = Response({"message": f"You are already liked post {post.id}."})
+            response = Response({"message": f"You've already liked post {post.id}."})
         return response
 
     @action(detail=True, methods=["patch"])
     def remove_like(self, request, pk=None):
         post = self.get_object()
-        user_id = get_user_info(self.request).get("id")
+        user_id = get_user_info(self.request).get("user_id", None)
         response = None
         if Like.objects.remove_like_post(post, user_id):
-            response = Response({"message": f"You removed like from post {post.id}."})
+            response = Response(
+                {"message": f"You've removed like from post {post.id}."}
+            )
         else:
-            response = Response({"message": f"You are didn't liked post {post.id}."})
+            response = Response({"message": f"Post {post.id} wasn't liked yet by you."})
         return response
 
 
