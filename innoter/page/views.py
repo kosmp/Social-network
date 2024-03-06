@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from post.serializers import PostSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -70,3 +72,29 @@ class PageViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+    @action(detail=True, methods=["patch"])
+    def block(self, request, pk=None):
+        page = self.get_object()
+        page.is_blocked = True
+        unblock_date = request.data.get("unblock_date")
+        if unblock_date:
+            try:
+                unblock_date = datetime.strptime(unblock_date, "%Y-%m-%d").date()
+                if unblock_date < datetime.now().date():
+                    return Response(
+                        {"error": "Unblock date must be in the future."}, status=400
+                    )
+                page.unblock_date = unblock_date
+            except ValueError:
+                return Response(
+                    {
+                        "error": "Invalid unblock date format. Expected format: YYYY-MM-DD."
+                    },
+                    status=400,
+                )
+        else:
+            unblock_date = datetime.now().date() + timedelta(days=30)
+            page.unblock_date = unblock_date
+        page.save()
+        return Response({"message": f"Page {pk} has been blocked."})
