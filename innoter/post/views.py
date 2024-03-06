@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Like, Post
-from .permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost
+from .permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost, IsAuthenticated
 from .serializers import PostSerializer
 
 
@@ -30,7 +30,7 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         post = self.get_object()
         user_id = get_user_info(self.request).get("user_id", None)
@@ -41,7 +41,7 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
             response = Response({"message": f"You've already liked post {post.id}."})
         return response
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def remove_like(self, request, pk=None):
         post = self.get_object()
         user_id = get_user_info(self.request).get("user_id", None)
