@@ -3,13 +3,13 @@ from page.utils import get_user_info
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Like, Post
 from .serializers import PostSerializer
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
     queryset = Post.objects.all()
 
     serializer_class = PostSerializer
