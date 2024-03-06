@@ -63,7 +63,11 @@ class PageViewSet(ModelViewSet):
         response.data = page_data
         return response
 
-    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=[IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
+    )
     def post(self, request, pk=None):
         page = self.get_object()
         data = request.data.copy()
