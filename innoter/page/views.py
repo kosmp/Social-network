@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Page
+from .models import Follower, Page
 from .paginations import CustomPageNumberPagination
 from .permissions import (
     IsAdminOrIsModeratorOfThePageOwner,
@@ -103,3 +103,27 @@ class PageViewSet(ModelViewSet):
             page.unblock_date = unblock_date
         page.save()
         return Response({"message": f"Page {pk} has been blocked."})
+
+    @action(detail=True, methods=["patch"])
+    def follow(self, request, pk=None):
+        page = self.get_object()
+        user_id = get_user_info(self.request).get("user_id", None)
+        response = None
+        if Follower.objects.follow_page(page, user_id):
+            response = Response({"message": f"You are now following page {page.id}."})
+        else:
+            response = Response(
+                {"message": f"You are already following page {page.id}."}
+            )
+        return response
+
+    @action(detail=True, methods=["patch"])
+    def unfollow(self, request, pk=None):
+        page = self.get_object()
+        user_id = get_user_info(self.request).get("user_id", None)
+        response = None
+        if Follower.objects.unfollow_page(page, user_id):
+            response = Response({"message": f"You no longer following page {page.id}."})
+        else:
+            response = Response({"message": f"You are not following page {page.id}."})
+        return response
