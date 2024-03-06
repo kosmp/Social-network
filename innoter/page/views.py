@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Page
 from .paginations import CustomPageNumberPagination
 from .permissions import (
+    IsAdminOrIsModeratorOfThePageOwner,
     IsAdminOrIsOwnerOrIsModeratorOfTheOwner,
     IsAuthenticated,
     IsPageOwner,
@@ -73,7 +74,11 @@ class PageViewSet(ModelViewSet):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-    @action(detail=True, methods=["patch"])
+    @action(
+        detail=True,
+        methods=["patch"],
+        permission_classes=[IsAuthenticated, IsAdminOrIsModeratorOfThePageOwner],
+    )
     def block(self, request, pk=None):
         page = self.get_object()
         page.is_blocked = True
