@@ -1,4 +1,5 @@
 from page.models import Follower
+from page.permissions import IsAuthenticated
 from page.utils import get_user_info
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
@@ -6,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Like, Post
-from .permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost, IsAuthenticated
+from .permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost
 from .serializers import PostSerializer
 
 
