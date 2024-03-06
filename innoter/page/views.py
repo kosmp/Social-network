@@ -45,6 +45,21 @@ class PageViewSet(ModelViewSet):
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        queryset = instance.posts.all()
+
+        posts = self.paginate_queryset(queryset)
+        serializer = PostSerializer(posts, many=True)
+
+        response = self.get_paginated_response(serializer.data)
+
+        page_data = self.get_serializer(instance).data
+        page_data.update(response.data)
+
+        response.data = page_data
+        return response
+
     @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
     def post(self, request, pk=None):
         page = self.get_object()
