@@ -127,3 +127,13 @@ class PageViewSet(ModelViewSet):
         else:
             response = Response({"message": f"You are not following page {page.id}."})
         return response
+
+    @action(
+        detail=True,
+        methods=["get"],
+        permission_classes=[IsAuthenticated],
+    )
+    def followers(self, request, pk=None):
+        page = self.get_object()
+        followers = Follower.objects.filter(page_id=pk).values("user_id")
+        return Response(followers)
