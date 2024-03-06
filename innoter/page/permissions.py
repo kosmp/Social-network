@@ -43,7 +43,7 @@ class IsAdminOrIsOwnerOrIsModeratorOfTheOwner(BasePermission):
         user_data = get_user_info(request)
         return bool(
             user_data.get("role", None) == "admin"
-            and str(obj.user_id) == user_data.get("user_id", None)
+            or str(obj.user_id) == user_data.get("user_id", None)
             or user_data.get("role", None) == "moderator"
             and obj.owner_group_id == user_data.get("group_id", None)
         )
