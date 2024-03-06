@@ -10,7 +10,6 @@ class PostSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
-        read_only_fields = ("page",)
 
     def get_likes_count(self, obj):
         return obj.likes.count()
