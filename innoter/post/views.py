@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Like, Post
+from .permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost
 from .serializers import PostSerializer
 
 
@@ -13,6 +14,21 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
     queryset = Post.objects.all()
 
     serializer_class = PostSerializer
+
+    permission_classes_by_action = {
+        "update": [IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost],
+        "partial_update": [IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost],
+        "destroy": [IsAdminOrIsOwnerOrIsModeratorOfTheOwnerOfPost],
+    }
+
+    def get_permissions(self):
+        try:
+            return [
+                permission()
+                for permission in self.permission_classes_by_action[self.action]
+            ]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     @action(detail=True, methods=["patch"])
     def like(self, request, pk=None):
