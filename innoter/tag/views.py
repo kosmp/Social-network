@@ -16,6 +16,7 @@ class TagViewSet(
 
     permission_classes_by_action = {
         "create": [IsAuthenticated],
+        "list": [IsAuthenticated],
     }
 
     def get_permissions(self):
