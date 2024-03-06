@@ -4,7 +4,7 @@ from post.managers import LikeManager
 
 
 class Post(models.Model):
-    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     reply_to_post_id = models.ForeignKey(
         "self", on_delete=models.SET_NULL, null=True, related_name="replies", blank=True
