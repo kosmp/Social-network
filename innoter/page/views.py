@@ -66,7 +66,7 @@ class PageViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=["post"],
-        permission_classes=[IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
+        permission_classes=[IsAuthenticated],
     )
     def post(self, request, pk=None):
         page = self.get_object()
