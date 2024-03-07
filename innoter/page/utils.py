@@ -13,12 +13,12 @@ def get_user_info(request):
             algorithms=[os.environ.get("ALGORITHM")],
         )
         user_data = {
-            "user_id": decoded.get("user_id", None),
-            "role": decoded.get("role", None),
-            "group_id": decoded.get("group_id", None),
-            "is_blocked": decoded.get("is_blocked", None),
-            "token_type": decoded.get("token_type", None),
-            "exp": decoded.get("exp", None),
+            "user_id": decoded.get("user_id"),
+            "role": decoded.get("role"),
+            "group_id": decoded.get("group_id"),
+            "is_blocked": decoded.get("is_blocked"),
+            "token_type": decoded.get("token_type"),
+            "exp": decoded.get("exp"),
         }
 
         return user_data

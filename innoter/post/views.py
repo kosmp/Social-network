@@ -33,7 +33,7 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
     @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         post = self.get_object()
-        user_id = get_user_info(self.request).get("user_id", None)
+        user_id = get_user_info(self.request).get("user_id")
         response = None
         if Like.objects.like_post(post, user_id):
             response = Response({"message": f"You've liked post {post.id}."})
@@ -44,7 +44,7 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
     @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def remove_like(self, request, pk=None):
         post = self.get_object()
-        user_id = get_user_info(self.request).get("user_id", None)
+        user_id = get_user_info(self.request).get("user_id")
         response = None
         if Like.objects.remove_like_post(post, user_id):
             response = Response(
@@ -61,6 +61,6 @@ class FeedViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def get_queryset(self):
         user_data = get_user_info(self.request)
         following_pages = Follower.objects.filter(
-            user_id=user_data.get("user_id", None)
+            user_id=user_data.get("user_id")
         ).values_list("page_id", flat=True)
         return Post.objects.filter(page__in=following_pages).order_by("-created_at")

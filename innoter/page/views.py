@@ -35,8 +35,8 @@ class PageViewSet(ModelViewSet):
     def perform_create(self, serializer):
         user_data = get_user_info(self.request)
         serializer.save(
-            user_id=user_data.get("user_id", None),
-            owner_group_id=user_data.get("group_id", None),
+            user_id=user_data.get("user_id"),
+            owner_group_id=user_data.get("group_id"),
         )
 
     def get_permissions(self):
@@ -111,7 +111,7 @@ class PageViewSet(ModelViewSet):
     @action(detail=True, methods=["patch"])
     def follow(self, request, pk=None):
         page = self.get_object()
-        user_id = get_user_info(self.request).get("user_id", None)
+        user_id = get_user_info(self.request).get("user_id")
         response = None
         if Follower.objects.follow_page(page, user_id):
             response = Response({"message": f"You are now following page {page.id}."})
@@ -124,7 +124,7 @@ class PageViewSet(ModelViewSet):
     @action(detail=True, methods=["patch"])
     def unfollow(self, request, pk=None):
         page = self.get_object()
-        user_id = get_user_info(self.request).get("user_id", None)
+        user_id = get_user_info(self.request).get("user_id")
         response = None
         if Follower.objects.unfollow_page(page, user_id):
             response = Response({"message": f"You no longer following page {page.id}."})
