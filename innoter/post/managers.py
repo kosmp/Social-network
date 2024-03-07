@@ -3,20 +3,14 @@ from django.db import models
 
 
 class LikeManager(models.Manager):
-    def like_post(self, post, user_id):
-        result = None
-        try:
-            self.get(post=post, user_id=user_id)
-            result = False
-        except ObjectDoesNotExist:
-            self.create(post=post, user_id=user_id)
-            result = True
-        return result
+    def like_post(self, post_id, user_id):
+        _, created = self.get_or_create(post_id=post_id, user_id=user_id)
+        return created
 
-    def remove_like_post(self, post, user_id):
+    def remove_like_post(self, post_id, user_id):
         result = None
         try:
-            like = self.get(post=post, user_id=user_id)
+            like = self.get(post_id=post_id, user_id=user_id)
             like.delete()
             result = True
         except ObjectDoesNotExist:
