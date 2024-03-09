@@ -14,6 +14,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "unblock-pages": {
         "task": "page.tasks.unblock_pages",
-        "schedule": crontab(hour=0, minute="*/1"),
+        "schedule": crontab(hour="*/9", minute="0"),
     },
 }
