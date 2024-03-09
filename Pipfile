@@ -8,7 +8,7 @@ django = "5.0.2"
 djangorestframework = "3.14.0"
 boto3 = "1.34.42"
 pyjwt = "2.8.0"
-celery = "5.3.6"
+celery = {version = "==5.3.6", extras = ["redis"]}
 pytest = "8.0.0"
 mysqlclient = "2.0.0"
 
