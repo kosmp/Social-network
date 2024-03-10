@@ -11,6 +11,7 @@ pyjwt = "2.8.0"
 celery = {version = "==5.3.6", extras = ["redis"]}
 pytest = "8.0.0"
 mysqlclient = "2.0.0"
+gunicorn = "21.2.0"
 
 [dev-packages]
 black = "24.2.0"
