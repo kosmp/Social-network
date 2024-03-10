@@ -83,6 +83,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {"format": "%(name)-12s %(levelname)-8s %(message)s"},
+        "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "console"},
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "formatter": "file",
+            "filename": os.environ.get("LOGGING_FILENAME"),
+        },
+    },
+    "loggers": {"": {"level": "INFO", "handlers": ["console", "file"]}},
+}
+
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"

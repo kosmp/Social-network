@@ -79,7 +79,7 @@ class PageViewSet(ModelViewSet):
         page = self.get_object()
         data = request.data.copy()
         data["page"] = page.id
-        logger.info(f"Page id is {page.id}")
+        logger.info(f"Page id is {page.id}.")
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
