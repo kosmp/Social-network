@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 from post.serializers import PostSerializer
@@ -16,6 +17,8 @@ from .permissions import (
 from .serializers import PageSerializer
 from .utils import get_user_info
 
+logger = logging.getLogger(__name__)
+
 
 class PageViewSet(ModelViewSet):
     queryset = Page.objects.all()
@@ -33,11 +36,13 @@ class PageViewSet(ModelViewSet):
     }
 
     def perform_create(self, serializer):
+        logger.info("Creating page. Invoked perform_create.")
         user_data = get_user_info(self.request)
         serializer.save(
             user_id=user_data.get("user_id"),
             owner_group_id=user_data.get("group_id"),
         )
+        logger.info("Page successfully created.")
 
     def get_permissions(self):
         try:
@@ -49,6 +54,7 @@ class PageViewSet(ModelViewSet):
             return [permission() for permission in self.permission_classes]
 
     def retrieve(self, request, *args, **kwargs):
+        logger.info("Retrieving page. Invoked retrieve action.")
         instance = self.get_object()
         queryset = instance.posts.all()
 
@@ -69,12 +75,15 @@ class PageViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def post(self, request, pk=None):
+        logger.info("Invoked post action.")
         page = self.get_object()
         data = request.data.copy()
         data["page"] = page.id
+        logger.info(f"Page id is {page.id}")
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            logger.info("Post successfully saved.")
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
@@ -84,6 +93,7 @@ class PageViewSet(ModelViewSet):
         permission_classes=[IsAdminOrIsModeratorOfThePageOwner],
     )
     def block(self, request, pk=None):
+        logger.info("Blocking page. Invoked block action.")
         page = self.get_object()
         page.is_blocked = True
         unblock_date = request.data.get("unblock_date")
@@ -96,6 +106,9 @@ class PageViewSet(ModelViewSet):
                     )
                 page.unblock_date = unblock_date
             except ValueError:
+                logger.error(
+                    "Invalid unblock date format. Expected format: YYYY-MM-DD."
+                )
                 return Response(
                     {
                         "error": "Invalid unblock date format. Expected format: YYYY-MM-DD."
@@ -106,10 +119,12 @@ class PageViewSet(ModelViewSet):
             unblock_date = datetime.now().date() + timedelta(days=30)
             page.unblock_date = unblock_date
         page.save()
+        logger.info(f"Page with id {pk} successfully blocked.")
         return Response({"message": f"Page {pk} has been blocked."})
 
     @action(detail=True, methods=["patch"])
     def follow(self, request, pk=None):
+        logger.info("Invoked follow action.")
         page = self.get_object()
         user_id = get_user_info(self.request).get("user_id")
         response = None
@@ -123,6 +138,7 @@ class PageViewSet(ModelViewSet):
 
     @action(detail=True, methods=["patch"])
     def unfollow(self, request, pk=None):
+        logger.info("Invoked unfollow action.")
         page = self.get_object()
         user_id = get_user_info(self.request).get("user_id")
         response = None
@@ -138,6 +154,7 @@ class PageViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def followers(self, request, pk=None):
+        logger.info("Invoked get followers action.")
         page = self.get_object()
         followers = Follower.objects.filter(page_id=pk).values("user_id")
         return Response(followers)
