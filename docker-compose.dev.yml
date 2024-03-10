@@ -3,7 +3,7 @@ services:
     image: mysql:8.2.0
     command: --default-authentication-plugin=caching_sha2_password
     volumes:
-      - mysql-data:/var/lib/db/mysql/data
+      - mysql-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
