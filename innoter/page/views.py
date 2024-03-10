@@ -129,8 +129,12 @@ class PageViewSet(ModelViewSet):
         user_id = get_user_info(self.request).get("user_id")
         response = None
         if Follower.objects.follow_page(page, user_id):
+            logger.info(f"User with id {user_id} followed page with id {page.id}.")
             response = Response({"message": f"You are now following page {page.id}."})
         else:
+            logger.info(
+                f"User with id {user_id} are already following page with id {page.id}."
+            )
             response = Response(
                 {"message": f"You are already following page {page.id}."}
             )
@@ -143,8 +147,12 @@ class PageViewSet(ModelViewSet):
         user_id = get_user_info(self.request).get("user_id")
         response = None
         if Follower.objects.unfollow_page(page, user_id):
+            logger.info(f"User with id {user_id} unfollowed page with id {page.id}.")
             response = Response({"message": f"You no longer following page {page.id}."})
         else:
+            logger.info(
+                f"User with id {user_id} are not following page with id {page.id}."
+            )
             response = Response({"message": f"You are not following page {page.id}."})
         return response
 
