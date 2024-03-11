@@ -46,3 +46,32 @@ class TestPermissions:
             )
             is False
         )
+
+    def test_is_moderator_of_page_owner_group(
+        self,
+        admin_request,
+        moderator_request,
+        user_request,
+        page,
+        page_from_moderator_with_other_group_id,
+    ):
+        assert (
+            IsModeratorOfThePageOwner().has_object_permission(
+                moderator_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsModeratorOfThePageOwner().has_object_permission(
+                moderator_request, None, page_from_moderator_with_other_group_id
+            )
+            is False
+        )
+        assert (
+            IsModeratorOfThePageOwner().has_object_permission(user_request, None, page)
+            is False
+        )
+        assert (
+            IsModeratorOfThePageOwner().has_object_permission(admin_request, None, page)
+            is False
+        )
