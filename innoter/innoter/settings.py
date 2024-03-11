@@ -68,6 +68,8 @@ DATABASES = {
     }
 }
 
+DATABASES["default"]["TEST"] = {"MIRROR": "default"}
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
