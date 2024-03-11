@@ -183,18 +183,3 @@ def moderator_request(mocker, moderator_headers):
 @pytest.fixture
 def admin_request(mocker, admin_headers):
     return mocker.Mock(headers=admin_headers)
-
-
-# @pytest.fixture
-# def page_input_data():
-#     return {"name": "pagetest", "tags": [1]}
-#
-#
-# @pytest.fixture
-# def post_input_data(page):
-#     return {"page": page.id, "content": "testcontent"}
-#
-#
-# @pytest.fixture
-# def tag_input_data():
-#     return {"name": "tagtest"}
