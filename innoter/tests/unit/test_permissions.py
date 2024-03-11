@@ -1,5 +1,4 @@
 import pytest
-from page.models import Page
 from page.permissions import (
     IsAdmin,
     IsAdminOrIsModeratorOfThePageOwner,
@@ -9,6 +8,9 @@ from page.permissions import (
     IsModeratorOfThePageOwner,
     IsPageOwner,
 )
+from page.serializers import PageSerializer
+from page.utils import get_user_info
+from page.views import PageViewSet
 
 
 @pytest.mark.django_db
@@ -33,3 +35,14 @@ class TestPermissions:
         assert IsModerator().has_permission(moderator_request, view) is True
         assert IsModerator().has_permission(admin_request, view) is False
         assert IsModerator().has_permission(user_request, view) is False
+
+    def test_is_page_owner(
+        self, user_request, user_token_payload, page, page_from_user_with_other_id
+    ):
+        assert IsPageOwner().has_object_permission(user_request, None, page) is True
+        assert (
+            IsPageOwner().has_object_permission(
+                user_request, None, page_from_user_with_other_id
+            )
+            is False
+        )

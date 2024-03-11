@@ -1,44 +1,26 @@
-import string
-from random import choices
-from uuid import uuid4
-
 import pytest
 from page.models import Follower, Page
-from post.models import Like, Post
-from tag.models import Tag
 
 
 @pytest.fixture
-def user_id():
-    return uuid4()
+def page(mocker, user_token_payload):
+    page_mock = mocker.MagicMock(spec=Page)
+    page_mock.id = 1
+    page_mock.user_id = user_token_payload.get("user_id")
+    page_mock.owner_group_id = user_token_payload.get("group_id")
+    page_mock.name = "test_page"
+    page_mock.tags = [1]
+
+    return page_mock
 
 
 @pytest.fixture
-def tag():
-    return Tag.objects.create(
-        name="".join(choices(string.ascii_lowercase, k=9)),
-    )
+def page_from_user_with_other_id(mocker, user_token_payload_with_other_user_id):
+    page_mock = mocker.MagicMock(spec=Page)
+    page_mock.id = 1
+    page_mock.user_id = user_token_payload_with_other_user_id.get("user_id")
+    page_mock.owner_group_id = user_token_payload_with_other_user_id.get("group_id")
+    page_mock.name = "test_page"
+    page_mock.tags = [1]
 
-
-@pytest.fixture
-def page(tag):
-    page_obj = Page.objects.create(
-        name="".join(choices(string.ascii_lowercase, k=9)),
-    )
-    page_obj.tags.set([tag.id])
-    return page_obj
-
-
-@pytest.fixture
-def post(page):
-    return Post.objects.create(page=page, content="test_content")
-
-
-@pytest.fixture
-def follower(page, user_id):
-    return Follower.objects.create(page_id=page, user_id=user_id)
-
-
-@pytest.fixture
-def like(post, user_id):
-    return Like.objects.create(post_id=post, user_id=user_id)
+    return page_mock

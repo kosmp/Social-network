@@ -75,6 +75,18 @@ def user_token_payload():
 
 
 @pytest.fixture
+def user_token_payload_with_other_user_id():
+    return {
+        "user_id": "d7d5a661-3571-4df2-9d66-ca063bbddd67",
+        "role": "user",
+        "group_id": "9f0a86f0-4d46-416b-bd59-d8c8ecc6a319",
+        "is_blocked": False,
+        "token_type": "access",
+        "exp": datetime.now() + timedelta(minutes=10),
+    }
+
+
+@pytest.fixture
 def moderator_token_payload():
     return {
         "user_id": "d7d5a661-3571-4df2-9d66-ca063bbddd41",
