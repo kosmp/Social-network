@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 
 import jwt
 import pytest
@@ -69,7 +70,7 @@ def user_token_payload():
         "group_id": "9f0a86f0-4d46-416b-bd59-d8c8ecc6a319",
         "is_blocked": False,
         "token_type": "access",
-        "exp": 1709753613,
+        "exp": datetime.now() + timedelta(minutes=10),
     }
 
 
@@ -81,7 +82,7 @@ def moderator_token_payload():
         "group_id": "9f0a86f0-4d46-416b-bd59-d8c8ecc6a319",
         "is_blocked": False,
         "token_type": "access",
-        "exp": 1709753613,
+        "exp": datetime.now() + timedelta(minutes=10),
     }
 
 
@@ -93,14 +94,14 @@ def admin_token_payload():
         "group_id": "9f0a86f0-4d46-416b-bd59-d8c8ecc6a319",
         "is_blocked": False,
         "token_type": "access",
-        "exp": 1709753613,
+        "exp": datetime.now() + timedelta(minutes=10),
     }
 
 
 ####################################### tokens #######################################
 def jwt_token(payload):
     return jwt.encode(
-        payload, os.environ.get("SECRET_KEY"), algorithm=os.environ.get("ALGORITHM")
+        payload, os.environ.get("JWT_SECRET_KEY"), algorithm=os.environ.get("ALGORITHM")
     )
 
 
