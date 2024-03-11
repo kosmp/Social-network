@@ -139,9 +139,14 @@ class TestPermissions:
             )
             is True
         )
-        assert IsPageOwner().has_object_permission(user_request, None, page) is True
         assert (
-            IsPageOwner().has_object_permission(
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
+                user_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
                 user_request, None, page_from_user_with_other_id
             )
             is False
