@@ -14,13 +14,13 @@ class IsAuthenticated(BasePermission):
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         user_data = get_user_info(request)
-        return user_data.get("user_role", None) == "admin"
+        return user_data.get("role", None) == "admin"
 
 
 class IsModerator(BasePermission):
     def has_permission(self, request, view):
         user_data = get_user_info(request)
-        return user_data.get("user_role", None) == "moderator"
+        return user_data.get("role", None) == "moderator"
 
 
 class IsPageOwner(BasePermission):
