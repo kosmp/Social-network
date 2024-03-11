@@ -8,9 +8,6 @@ from page.permissions import (
     IsModeratorOfThePageOwner,
     IsPageOwner,
 )
-from page.serializers import PageSerializer
-from page.utils import get_user_info
-from page.views import PageViewSet
 
 
 @pytest.mark.django_db
@@ -73,5 +70,79 @@ class TestPermissions:
         )
         assert (
             IsModeratorOfThePageOwner().has_object_permission(admin_request, None, page)
+            is False
+        )
+
+    def test_is_admin_or_is_moderator_of_the_owner(
+        self,
+        admin_request,
+        moderator_request,
+        user_request,
+        page,
+        page_from_moderator_with_other_group_id,
+    ):
+        assert (
+            IsAdminOrIsModeratorOfThePageOwner().has_object_permission(
+                admin_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsModeratorOfThePageOwner().has_object_permission(
+                moderator_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsModeratorOfThePageOwner().has_object_permission(
+                moderator_request, None, page_from_moderator_with_other_group_id
+            )
+            is False
+        )
+        assert (
+            IsAdminOrIsModeratorOfThePageOwner().has_object_permission(
+                user_request, None, page
+            )
+            is False
+        )
+
+    def test_is_admin_or_is_owner_is_moderator_of_the_owner(
+        self,
+        admin_request,
+        moderator_request,
+        user_request,
+        page,
+        page_from_moderator_with_other_group_id,
+        page_from_user_with_other_id,
+    ):
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
+                admin_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
+                moderator_request, None, page
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
+                moderator_request, None, page_from_moderator_with_other_group_id
+            )
+            is False
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
+                user_request, None, page
+            )
+            is True
+        )
+        assert IsPageOwner().has_object_permission(user_request, None, page) is True
+        assert (
+            IsPageOwner().has_object_permission(
+                user_request, None, page_from_user_with_other_id
+            )
             is False
         )
