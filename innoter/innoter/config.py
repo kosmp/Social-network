@@ -21,6 +21,6 @@ class PydanticSettings(BaseSettings):
 
 
 p_settings = PydanticSettings(
-    _env_file=str(Path(__file__).parent.parent.parent / ".dev.env"),
+    _env_file=str(Path(__file__).parent.parent.parent / ".env"),
     _env_file_encoding="utf-8",
 )
