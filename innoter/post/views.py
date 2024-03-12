@@ -1,8 +1,9 @@
 import logging
 
 from page.models import Follower
-from page.permissions import IsAdminOrIsOwnerOrIsModeratorOfTheOwner, IsAuthenticated
+from page.permissions import IsAuthenticated
 from page.utils import get_user_info
+from post.permissions import IsAdminOrIsOwnerOrIsModeratorOfThePostOwner
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -20,9 +21,9 @@ class PostViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericView
     serializer_class = PostSerializer
 
     permission_classes_by_action = {
-        "update": [IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
-        "partial_update": [IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
-        "destroy": [IsAdminOrIsOwnerOrIsModeratorOfTheOwner],
+        "update": [IsAdminOrIsOwnerOrIsModeratorOfThePostOwner],
+        "partial_update": [IsAdminOrIsOwnerOrIsModeratorOfThePostOwner],
+        "destroy": [IsAdminOrIsOwnerOrIsModeratorOfThePostOwner],
     }
 
     def get_permissions(self):
