@@ -58,4 +58,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pipenv run pytest tests/unit --disable-warnings
+          pipenv run pytest innoter/tests/unit --disable-warnings
