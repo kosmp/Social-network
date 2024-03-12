@@ -1,12 +1,13 @@
-import os
 import sys
 from pathlib import Path
+
+from innoter.config import p_settings
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = p_settings.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -58,14 +59,14 @@ WSGI_APPLICATION = "innoter.wsgi.application"
 
 DATABASES = {
     "default": {
-        "NAME": os.environ.get("MYSQL_DATABASE"),
+        "NAME": p_settings.mysql_database,
         "ENGINE": "django.db.backends.mysql",
-        "HOST": os.environ.get("MYSQL_HOST"),
-        "PORT": os.environ.get("MYSQL_PORT"),
-        "USER": os.environ.get("MYSQL_USER"),
-        "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
+        "HOST": p_settings.mysql_host,
+        "PORT": p_settings.mysql_port,
+        "USER": p_settings.mysql_user,
+        "PASSWORD": p_settings.mysql_password,
         "OPTIONS": {"autocommit": True},
-        "TEST": {"MIRROR": "default"} if os.environ.get("MYSQL_DATABASE") else None,
+        "TEST": {"MIRROR": "default"},
     }
 }
 
@@ -84,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-if os.environ.get("LOGGING_TO_FILE_ENABLED", "False").lower() == "true":
+if p_settings.logging_to_file_enabled.lower() == "true":
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -98,7 +99,7 @@ if os.environ.get("LOGGING_TO_FILE_ENABLED", "False").lower() == "true":
                 "level": "INFO",
                 "class": "logging.FileHandler",
                 "formatter": "file",
-                "filename": os.environ.get("LOGGING_FILENAME"),
+                "filename": p_settings.logging_filename,
             },
         },
         "loggers": {"": {"level": "INFO", "handlers": ["console", "file"]}},
@@ -131,6 +132,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+CELERY_BROKER_URL = (p_settings.celery_broker_url,)
+CELERY_RESULT_BACKEND = (p_settings.celery_result_backend,)
 CELERY_TIMEZONE = "Europe/Minsk"
