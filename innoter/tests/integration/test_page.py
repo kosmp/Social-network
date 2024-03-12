@@ -7,7 +7,6 @@ from page.models import Follower
 from rest_framework import status
 
 
-@pytest.mark.django_db
 class TestPageViewSet:
     def test_post(self, api_client, user_headers):
         url = "/api/v1/page/"

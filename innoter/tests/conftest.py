@@ -1,8 +1,10 @@
 import os
 from datetime import datetime, timedelta
 
+import django
 import jwt
 import pytest
+from django.conf import settings
 from page.permissions import (
     IsAdmin,
     IsAdminOrIsModeratorOfThePageOwner,
@@ -12,6 +14,13 @@ from page.permissions import (
     IsModeratorOfThePageOwner,
     IsPageOwner,
 )
+
+from innoter.settings import p_settings
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "innoter.settings"
+
+if not settings.configured:
+    django.setup()
 
 
 ####################################### permissions #######################################
@@ -125,7 +134,7 @@ def admin_token_payload():
 ####################################### tokens #######################################
 def jwt_token(payload):
     return jwt.encode(
-        payload, os.environ.get("JWT_SECRET_KEY"), algorithm=os.environ.get("ALGORITHM")
+        payload, p_settings.jwt_secret_key, algorithm=p_settings.algorithm
     )
 
 

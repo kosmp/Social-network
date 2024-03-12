@@ -6,7 +6,6 @@ import pytest
 from rest_framework import status
 
 
-@pytest.mark.django_db
 class TestTagViewSet:
     def test_post(self, api_client, user_headers):
         url = "/api/v1/tag/tag/"

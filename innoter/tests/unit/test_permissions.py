@@ -1,4 +1,3 @@
-import pytest
 from page.permissions import (
     IsAdmin,
     IsAdminOrIsModeratorOfThePageOwner,
@@ -10,7 +9,6 @@ from page.permissions import (
 )
 
 
-@pytest.mark.django_db
 class TestPermissions:
     def test_jwt_auth(self, mocker, admin_request, moderator_request, user_request):
         view = mocker.Mock()

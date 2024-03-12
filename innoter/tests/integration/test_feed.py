@@ -2,7 +2,6 @@ import pytest
 from rest_framework import status
 
 
-@pytest.mark.django_db
 class TestFeedViewSet:
     def test_get(self, api_client, user_headers, setup_feed):
         url = "/api/v1/feed/"

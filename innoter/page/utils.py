@@ -1,8 +1,9 @@
 import logging
-import os
 
 import jwt
 from jwt import InvalidTokenError
+
+from innoter.config import p_settings
 
 logger = logging.getLogger(__name__)
 
@@ -13,8 +14,8 @@ def get_user_info(request):
         token = request.headers.get("Authorization", "").replace("Bearer ", "")
         decoded = jwt.decode(
             token,
-            os.environ.get("JWT_SECRET_KEY"),
-            algorithms=[os.environ.get("ALGORITHM")],
+            p_settings.jwt_secret_key,
+            algorithms=[p_settings.algorithm],
         )
         user_data = {
             "user_id": decoded.get("user_id"),

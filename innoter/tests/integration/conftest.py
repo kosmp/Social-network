@@ -10,6 +10,16 @@ from rest_framework.test import APIClient
 from tag.models import Tag
 
 
+@pytest.fixture(autouse=True)
+def cleanup_database():
+    yield
+    Follower.objects.all().delete()
+    Page.objects.all().delete()
+    Post.objects.all().delete()
+    Like.objects.all().delete()
+    Tag.objects.all().delete()
+
+
 @pytest.fixture
 def api_client():
     return APIClient()

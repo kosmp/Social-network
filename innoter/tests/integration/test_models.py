@@ -1,10 +1,8 @@
-import pytest
 from page.models import Follower, Page
 from post.models import Like, Post
 from tag.models import Tag
 
 
-@pytest.mark.django_db
 class TestModels:
     def test_tag_creation(self, tag):
         assert Tag.objects.count() == 1

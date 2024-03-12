@@ -7,7 +7,6 @@ from post.models import Like
 from rest_framework import status
 
 
-@pytest.mark.django_db
 class TestPostViewSet:
     # def test_patch(self, api_client, user_headers, page, post):
     #     url = f"/api/v1/post/{post.id}/"
