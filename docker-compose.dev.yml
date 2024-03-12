@@ -23,6 +23,7 @@ services:
     container_name: celery
     build:
       context: .
+      dockerfile: Dockerfile.dev
     restart: always
     command: sh scripts/entry_celery.sh
     env_file:
@@ -39,6 +40,7 @@ services:
     container_name: innoter-app
     build:
       context: .
+      dockerfile: Dockerfile.dev
     command: sh scripts/entry.sh
     env_file:
       - .dev.env
