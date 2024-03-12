@@ -17,7 +17,7 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
     user_id = models.UUIDField(null=False)
 
     objects = LikeManager()

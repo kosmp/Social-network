@@ -41,7 +41,7 @@ class TestPageViewSet:
         assert response.status_code == status.HTTP_200_OK
 
     def test_unfollow(self, api_client, user_headers, page):
-        Follower.objects.follow_page(page_id=page, user_id=page.user_id)
+        Follower.objects.follow_page(page=page, user_id=page.user_id)
 
         url = f"/api/v1/page/{page.id}/unfollow/"
         response = api_client.patch(url, headers=user_headers)

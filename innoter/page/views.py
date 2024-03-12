@@ -164,5 +164,5 @@ class PageViewSet(ModelViewSet):
     def followers(self, request, pk=None):
         logger.info("Invoked get followers action.")
         page = self.get_object()
-        followers = Follower.objects.filter(page_id=pk).values("user_id")
+        followers = Follower.objects.filter(page=pk).values("user_id")
         return Response(followers)

@@ -7,20 +7,20 @@ logger = logging.getLogger(__name__)
 
 
 class LikeManager(models.Manager):
-    def like_post(self, post_id, user_id):
+    def like_post(self, post, user_id):
         logger.info(
-            f"Invoked like post with id {post_id} from manager for user with id {user_id}."
+            f"Invoked like post with id {post.id} from manager for user with id {user_id}."
         )
-        _, created = self.get_or_create(post_id=post_id, user_id=user_id)
+        _, created = self.get_or_create(post=post, user_id=user_id)
         return created
 
-    def remove_like_post(self, post_id, user_id):
+    def remove_like_post(self, post, user_id):
         logger.info(
-            f"Invoked remove like post with id {post_id} from manager for user with id {user_id}."
+            f"Invoked remove like post with id {post.id} from manager for user with id {user_id}."
         )
         result = None
         try:
-            like = self.get(post_id=post_id, user_id=user_id)
+            like = self.get(post=post, user_id=user_id)
             like.delete()
             result = True
         except ObjectDoesNotExist:

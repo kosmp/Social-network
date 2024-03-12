@@ -55,12 +55,12 @@ def post(page):
 
 @pytest.fixture
 def follower(page, user_id):
-    return Follower.objects.create(page_id=page, user_id=user_id)
+    return Follower.objects.create(page=page, user_id=user_id)
 
 
 @pytest.fixture
 def like(post, user_id):
-    return Like.objects.create(post_id=post, user_id=user_id)
+    return Like.objects.create(post=post, user_id=user_id)
 
 
 @pytest.fixture
@@ -75,6 +75,6 @@ def setup_feed(user_request):
         page=page, content="".join(choices(string.ascii_lowercase, k=20))
     )
     follower = Follower.objects.create(
-        page_id=page, user_id=get_user_info(user_request).get("user_id")
+        page=page, user_id=get_user_info(user_request).get("user_id")
     )
     return page, post1, post2, follower
