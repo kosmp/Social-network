@@ -14,7 +14,7 @@ jobs:
 
       - name: Build app container
         run: |
-          docker build -t innoter-app:latest .
+          docker build -t innoter-app:latest -f Dockerfile.prod .
   lint:
     needs: build
     runs-on: ubuntu-latest
