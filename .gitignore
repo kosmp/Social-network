@@ -58,4 +58,3 @@ env.bak/
 venv.bak/
 
 .idea/
-Pipfile.lock
