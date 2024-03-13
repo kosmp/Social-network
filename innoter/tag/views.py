@@ -1,3 +1,5 @@
+import logging
+
 from page.models import Page
 from page.paginations import CustomPageNumberPagination
 from page.permissions import IsAuthenticated
@@ -6,6 +8,8 @@ from rest_framework import mixins, viewsets
 
 from .models import Tag
 from .serializers import TagSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class TagViewSet(
@@ -47,6 +51,7 @@ class TagsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             return [permission() for permission in self.permission_classes]
 
     def get_queryset(self):
+        logger.info("Invoked get_queryset to get pages filtered by tag name.")
         queryset = Page.objects.all()
 
         filter_by_name = self.request.query_params.get("filter_by_name")

@@ -1,9 +1,13 @@
-import os
+import sys
 from pathlib import Path
+
+from innoter.config import pydantic_config
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = pydantic_config.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -18,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_spectacular",
     "page",
     "post",
     "tag",
@@ -32,6 +37,30 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+
+#######################
+#       OPENAPI       #
+#######################
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Innoter API",
+    "DESCRIPTION": "The best social network API!",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SECURITY_DEFINITIONS": {
+        "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
+}
+
+#######################
 
 ROOT_URLCONF = "innoter.urls"
 
@@ -55,13 +84,14 @@ WSGI_APPLICATION = "innoter.wsgi.application"
 
 DATABASES = {
     "default": {
-        "NAME": os.environ.get("MYSQL_DATABASE"),
+        "NAME": pydantic_config.mysql_database,
         "ENGINE": "django.db.backends.mysql",
-        "HOST": os.environ.get("MYSQL_HOST"),
-        "PORT": os.environ.get("MYSQL_PORT"),
-        "USER": os.environ.get("MYSQL_USER"),
-        "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
+        "HOST": pydantic_config.mysql_host,
+        "PORT": pydantic_config.mysql_port,
+        "USER": pydantic_config.mysql_user,
+        "PASSWORD": pydantic_config.mysql_password,
         "OPTIONS": {"autocommit": True},
+        "TEST": {"MIRROR": "default"},
     }
 }
 
@@ -80,6 +110,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+if pydantic_config.logging_to_file_enabled.lower() == "true":
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {"format": "%(name)-12s %(levelname)-8s %(message)s"},
+            "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+        },
+        "handlers": {
+            "console": {"class": "logging.StreamHandler", "formatter": "console"},
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "formatter": "file",
+                "filename": pydantic_config.logging_filename,
+            },
+        },
+        "loggers": {"": {"level": "INFO", "handlers": ["console", "file"]}},
+    }
+else:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {"format": "%(name)-12s %(levelname)-8s %(message)s"},
+            "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+        },
+        "handlers": {
+            "console": {"class": "logging.StreamHandler", "formatter": "console"},
+        },
+        "loggers": {"": {"level": "INFO", "handlers": ["console"]}},
+    }
+
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -88,6 +151,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+STATIC_ROOT = BASE_DIR / "static/"
+
 STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_BROKER_URL = (pydantic_config.celery_broker_url,)
+CELERY_RESULT_BACKEND = (pydantic_config.celery_result_backend,)
+CELERY_TIMEZONE = "Europe/Minsk"

@@ -1,16 +1,16 @@
 services:
-  mysql:
+  test-mysql:
     image: mysql:8.2.0
     command: --default-authentication-plugin=caching_sha2_password
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data-test:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - '3306:${MYSQL_PORT}'
+      - '3308:${MYSQL_PORT}'
     init: true
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
@@ -18,50 +18,50 @@ services:
       retries: 5
       start_period: 5s
     networks:
-      - innoter-network
-  celery:
-    container_name: celery
+      - innoter-test-network
+  test-celery:
+    container_name: test-celery
     build:
       context: .
       dockerfile: Dockerfile.dev
     restart: always
     command: sh scripts/entry_celery.sh
     env_file:
-      - .dev.env
+      - .test.env
     networks:
       - user-management-service_app-network
-      - innoter-network
+      - innoter-test-network
     healthcheck:
       test: [ "CMD", "celery", "inspect", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
-  innoter-app:
-    container_name: innoter-app
+  test-innoter-app:
+    container_name: test-innoter-app
     build:
       context: .
       dockerfile: Dockerfile.dev
     command: sh scripts/entry.sh
     env_file:
-      - .dev.env
+      - .test.env
     volumes:
       - .:/usr/src/app
     ports:
-      - 8001:${APP_PORT}
+      - 8004:${APP_PORT}
     init: true
     depends_on:
-      mysql:
+      test-mysql:
         condition: service_healthy
-      celery:
+      test-celery:
         condition: service_healthy
     networks:
-      - innoter-network
+      - innoter-test-network
 
 volumes:
-  mysql-data:
+  mysql-data-test:
     driver: local
 networks:
   user-management-service_app-network:
     external: true
-  innoter-network:
+  innoter-test-network:
     driver: bridge

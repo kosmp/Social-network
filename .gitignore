@@ -40,6 +40,7 @@ cover/
 
 # Django stuff:
 *.log
+static/
 local_settings.py
 
 # Celery stuff
@@ -57,4 +58,3 @@ env.bak/
 venv.bak/
 
 .idea/
-Pipfile.lock

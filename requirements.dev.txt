@@ -43,3 +43,7 @@ uritemplate==4.1.1; python_version >= '3.6'
 urllib3==2.0.7; python_version >= '3.10'
 vine==5.1.0; python_version >= '3.6'
 wcwidth==0.2.13
+iniconfig==2.0.0; python_version >= '3.7'
+pluggy==1.4.0; python_version >= '3.8'
+pytest==8.1.1; python_version >= '3.8'
+pytest-mock==3.12.0; python_version >= '3.8'
