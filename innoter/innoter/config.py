@@ -17,7 +17,7 @@ class PydanticSettings(BaseSettings):
     celery_broker_url: str | None
     celery_result_backend: str | None
     logging_filename: str | None
-    logging_to_file_enabled: True | False
+    logging_to_file_enabled: str | None
 
 
 pydantic_config = PydanticSettings(

@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-if pydantic_config.logging_to_file_enabled is True:
+if pydantic_config.logging_to_file_enabled.lower() == "true":
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
