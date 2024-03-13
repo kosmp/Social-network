@@ -3,7 +3,7 @@ import logging
 import jwt
 from jwt import InvalidTokenError
 
-from innoter.config import p_settings
+from innoter.config import pydantic_config
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +14,8 @@ def get_user_info(request):
         token = request.headers.get("Authorization", "").replace("Bearer ", "")
         decoded = jwt.decode(
             token,
-            p_settings.jwt_secret_key,
-            algorithms=[p_settings.algorithm],
+            pydantic_config.jwt_secret_key,
+            algorithms=[pydantic_config.algorithm],
         )
         user_data = {
             "user_id": decoded.get("user_id"),

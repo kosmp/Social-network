@@ -20,7 +20,7 @@ class PydanticSettings(BaseSettings):
     logging_to_file_enabled: str = "False"
 
 
-p_settings = PydanticSettings(
+pydantic_config = PydanticSettings(
     _env_file=str(Path(__file__).parent.parent.parent / ".env"),
     _env_file_encoding="utf-8",
 )

@@ -15,7 +15,7 @@ from page.permissions import (
     IsPageOwner,
 )
 
-from innoter.settings import p_settings
+from innoter.settings import pydantic_config
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "innoter.settings"
 
@@ -134,7 +134,7 @@ def admin_token_payload():
 ####################################### tokens #######################################
 def jwt_token(payload):
     return jwt.encode(
-        payload, p_settings.jwt_secret_key, algorithm=p_settings.algorithm
+        payload, pydantic_config.jwt_secret_key, algorithm=pydantic_config.algorithm
     )
 
 

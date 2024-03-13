@@ -1,13 +1,13 @@
 import sys
 from pathlib import Path
 
-from innoter.config import p_settings
+from innoter.config import pydantic_config
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = p_settings.secret_key
+SECRET_KEY = pydantic_config.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,12 +84,12 @@ WSGI_APPLICATION = "innoter.wsgi.application"
 
 DATABASES = {
     "default": {
-        "NAME": p_settings.mysql_database,
+        "NAME": pydantic_config.mysql_database,
         "ENGINE": "django.db.backends.mysql",
-        "HOST": p_settings.mysql_host,
-        "PORT": p_settings.mysql_port,
-        "USER": p_settings.mysql_user,
-        "PASSWORD": p_settings.mysql_password,
+        "HOST": pydantic_config.mysql_host,
+        "PORT": pydantic_config.mysql_port,
+        "USER": pydantic_config.mysql_user,
+        "PASSWORD": pydantic_config.mysql_password,
         "OPTIONS": {"autocommit": True},
         "TEST": {"MIRROR": "default"},
     }
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-if p_settings.logging_to_file_enabled.lower() == "true":
+if pydantic_config.logging_to_file_enabled.lower() == "true":
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -124,7 +124,7 @@ if p_settings.logging_to_file_enabled.lower() == "true":
                 "level": "INFO",
                 "class": "logging.FileHandler",
                 "formatter": "file",
-                "filename": p_settings.logging_filename,
+                "filename": pydantic_config.logging_filename,
             },
         },
         "loggers": {"": {"level": "INFO", "handlers": ["console", "file"]}},
@@ -157,6 +157,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CELERY_BROKER_URL = (p_settings.celery_broker_url,)
-CELERY_RESULT_BACKEND = (p_settings.celery_result_backend,)
+CELERY_BROKER_URL = (pydantic_config.celery_broker_url,)
+CELERY_RESULT_BACKEND = (pydantic_config.celery_result_backend,)
 CELERY_TIMEZONE = "Europe/Minsk"
