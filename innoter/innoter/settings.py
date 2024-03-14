@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = pydantic_config.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = pydantic_config.debug.lower() == "true"
+DEBUG = pydantic_config.debug and pydantic_config.debug.lower() == "true"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -110,7 +110,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-if pydantic_config.logging_to_file_enabled.lower() == "true":
+if (
+    pydantic_config.logging_to_file_enabled
+    and pydantic_config.logging_to_file_enabled.lower() == "true"
+):
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
