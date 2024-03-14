@@ -7,6 +7,7 @@ from page.permissions import (
     IsModeratorOfThePageOwner,
     IsPageOwner,
 )
+from post.permissions import IsAdminOrIsOwnerOrIsModeratorOfThePostOwner
 
 
 class TestPermissions:
@@ -146,6 +147,52 @@ class TestPermissions:
         assert (
             IsAdminOrIsOwnerOrIsModeratorOfTheOwner().has_object_permission(
                 user_request, None, page_from_user_with_other_id
+            )
+            is False
+        )
+
+    def test_is_admin_or_is_owner_is_moderator_of_the_post_owner(
+        self,
+        admin_request,
+        moderator_request,
+        user_request,
+        post,
+        post_from_moderator_with_other_group_id,
+        post_from_user_with_other_id,
+    ):
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                admin_request, None, post
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                moderator_request, None, post
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                moderator_request, None, post_from_moderator_with_other_group_id
+            )
+            is False
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                user_request, None, post
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                user_request, None, post
+            )
+            is True
+        )
+        assert (
+            IsAdminOrIsOwnerOrIsModeratorOfThePostOwner().has_object_permission(
+                user_request, None, post_from_user_with_other_id
             )
             is False
         )
