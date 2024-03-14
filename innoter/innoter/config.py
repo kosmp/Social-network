@@ -18,6 +18,7 @@ class PydanticSettings(BaseSettings):
     celery_result_backend: str | None = None
     logging_filename: str | None = None
     logging_to_file_enabled: str | None = None
+    debug: str | None = None
 
 
 pydantic_config = PydanticSettings(

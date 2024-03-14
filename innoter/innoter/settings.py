@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = pydantic_config.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = pydantic_config.debug.lower() == "true"
 
 ALLOWED_HOSTS = ["*"]
 
