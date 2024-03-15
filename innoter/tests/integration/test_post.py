@@ -32,6 +32,8 @@ class TestPostViewSet:
     def test_remove_like(self, api_client, user_headers, page, post):
         Like.objects.like_post(post=post, user_id=page.user_id)
 
-        url = f"/api/v1/post/{post.id}/remove_like/"
+        url = f"/api/v1/post/{post.id}/like/"
         response = api_client.patch(url, headers=user_headers)
         assert response.status_code == status.HTTP_200_OK
+        response_second = api_client.patch(url, headers=user_headers)
+        assert response_second.status_code == status.HTTP_200_OK

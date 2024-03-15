@@ -9,21 +9,18 @@ logger = logging.getLogger(__name__)
 class FollowerManager(models.Manager):
     def follow_page(self, page, user_id):
         logger.info(
-            f"Invoked follow page with id {page.id} from manager for user with id {user_id}."
+            f"Invoked follow/unfollow action from manager for page with id {page.id} for user with id {user_id}."
         )
-        _, created = self.get_or_create(page=page, user_id=user_id)
-        return created
 
-    def unfollow_page(self, page, user_id):
-        logger.info(
-            f"Invoked unfollow page with id {page.id} from manager for user with id {user_id}."
-        )
         result = None
         try:
             follower = self.get(page=page, user_id=user_id)
             follower.delete()
-            result = True
+            result = False
         except ObjectDoesNotExist:
             logger.error("Follower object does not exist.")
-            result = False
+            self.create(page=page, user_id=user_id)
+            logger.info(f"Followed page with id {page.id}")
+
+            result = True
         return result

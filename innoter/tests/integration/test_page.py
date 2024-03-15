@@ -43,9 +43,11 @@ class TestPageViewSet:
     def test_unfollow(self, api_client, user_headers, page):
         Follower.objects.follow_page(page=page, user_id=page.user_id)
 
-        url = f"/api/v1/page/{page.id}/unfollow/"
+        url = f"/api/v1/page/{page.id}/follow/"
         response = api_client.patch(url, headers=user_headers)
         assert response.status_code == status.HTTP_200_OK
+        response_second = api_client.patch(url, headers=user_headers)
+        assert response_second.status_code == status.HTTP_200_OK
 
     def test_followers(self, api_client, user_headers, page):
         url = f"/api/v1/page/{page.id}/followers/"

@@ -144,25 +144,7 @@ class PageViewSet(ModelViewSet):
             logger.info(
                 f"User with id {user_id} are already following page with id {page.id}."
             )
-            response = Response(
-                {"message": f"You are already following page {page.id}."}
-            )
-        return response
-
-    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
-    def unfollow(self, request, pk=None):
-        logger.info("Invoked unfollow action.")
-        page = self.get_object()
-        user_id = get_user_info(self.request).get("user_id")
-        response = None
-        if Follower.objects.unfollow_page(page, user_id):
-            logger.info(f"User with id {user_id} unfollowed page with id {page.id}.")
-            response = Response({"message": f"You no longer following page {page.id}."})
-        else:
-            logger.info(
-                f"User with id {user_id} are not following page with id {page.id}."
-            )
-            response = Response({"message": f"You are not following page {page.id}."})
+            response = Response({"message": f"You aren't following page {page.id}."})
         return response
 
     @action(
