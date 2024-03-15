@@ -26,7 +26,5 @@ class TestLikeManager:
 
     def test_remove_like_post(self, post, user_id):
         Like.objects.like_post(post, user_id)
-        Like.objects.remove_like_post(post, user_id)
-        assert Like.objects.count() == 0
-        Like.objects.remove_like_post(post, user_id)
+        Like.objects.like_post(post, user_id)
         assert Like.objects.count() == 0

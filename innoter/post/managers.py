@@ -11,19 +11,15 @@ class LikeManager(models.Manager):
         logger.info(
             f"Invoked like post with id {post.id} from manager for user with id {user_id}."
         )
-        _, created = self.get_or_create(post=post, user_id=user_id)
-        return created
-
-    def remove_like_post(self, post, user_id):
-        logger.info(
-            f"Invoked remove like post with id {post.id} from manager for user with id {user_id}."
-        )
         result = None
         try:
             like = self.get(post=post, user_id=user_id)
             like.delete()
-            result = True
+            result = False
         except ObjectDoesNotExist:
             logger.error("Like object does not exist.")
-            result = False
+            self.create(post=post, user_id=user_id)
+            logger.info(f"Liked post with id {post.id}")
+
+            result = True
         return result
