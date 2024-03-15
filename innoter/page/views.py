@@ -122,7 +122,7 @@ class PageViewSet(ModelViewSet):
         logger.info(f"Page with id {pk} successfully blocked.")
         return Response({"message": f"Page {pk} has been blocked."})
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def follow(self, request, pk=None):
         logger.info("Invoked follow action.")
         page = self.get_object()
@@ -140,7 +140,7 @@ class PageViewSet(ModelViewSet):
             )
         return response
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def unfollow(self, request, pk=None):
         logger.info("Invoked unfollow action.")
         page = self.get_object()
