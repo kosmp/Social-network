@@ -19,6 +19,10 @@ class PydanticSettings(BaseSettings):
     logging_filename: str | None = None
     logging_to_file_enabled: str | None = None
     debug: str | None = None
+    localstack_access_key_id: str | None = None
+    localstack_secret_access_key: str | None = None
+    localstack_endpoint_url: str | None = None
+    bucket_name: str | None = None
 
 
 pydantic_config = PydanticSettings(

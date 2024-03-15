@@ -15,7 +15,7 @@ from .permissions import (
     IsPageOwner,
 )
 from .serializers import PageSerializer
-from .utils import get_user_info
+from .utils import get_user_info, upload_file
 
 logger = logging.getLogger(__name__)
 
@@ -35,12 +35,21 @@ class PageViewSet(ModelViewSet):
         "partial_update": [IsPageOwner],
     }
 
+    def perform_update(self, serializer):
+        key = serializer.validated_data.get("name") or self.get_object().name
+        key = upload_file(key, serializer, self.request)
+
+        serializer.save(image_url=key)
+
     def perform_create(self, serializer):
         logger.info("Creating page. Invoked perform_create.")
         user_data = get_user_info(self.request)
+        key = upload_file(None, serializer, self.request)
+
         serializer.save(
             user_id=user_data.get("user_id"),
             owner_group_id=user_data.get("group_id"),
+            image_url=key,
         )
         logger.info("Page successfully created.")
 
