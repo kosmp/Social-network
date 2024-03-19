@@ -50,6 +50,7 @@ celerybeat.pid
 # Environments
 .prod.env
 .dev.env
+.test.env
 .venv
 env/
 venv/

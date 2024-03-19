@@ -15,7 +15,7 @@ from .permissions import (
     IsPageOwner,
 )
 from .serializers import PageSerializer
-from .utils import get_user_info
+from .utils import get_user_info, upload_file
 
 logger = logging.getLogger(__name__)
 
@@ -35,12 +35,21 @@ class PageViewSet(ModelViewSet):
         "partial_update": [IsPageOwner],
     }
 
+    def perform_update(self, serializer):
+        key = serializer.validated_data.get("name") or self.get_object().name
+        key = upload_file(key, serializer, self.request)
+
+        serializer.save(image_url=key)
+
     def perform_create(self, serializer):
         logger.info("Creating page. Invoked perform_create.")
         user_data = get_user_info(self.request)
+        key = upload_file(None, serializer, self.request)
+
         serializer.save(
             user_id=user_data.get("user_id"),
             owner_group_id=user_data.get("group_id"),
+            image_url=key,
         )
         logger.info("Page successfully created.")
 
@@ -122,7 +131,7 @@ class PageViewSet(ModelViewSet):
         logger.info(f"Page with id {pk} successfully blocked.")
         return Response({"message": f"Page {pk} has been blocked."})
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes=[IsAuthenticated])
     def follow(self, request, pk=None):
         logger.info("Invoked follow action.")
         page = self.get_object()
@@ -135,25 +144,7 @@ class PageViewSet(ModelViewSet):
             logger.info(
                 f"User with id {user_id} are already following page with id {page.id}."
             )
-            response = Response(
-                {"message": f"You are already following page {page.id}."}
-            )
-        return response
-
-    @action(detail=True, methods=["patch"])
-    def unfollow(self, request, pk=None):
-        logger.info("Invoked unfollow action.")
-        page = self.get_object()
-        user_id = get_user_info(self.request).get("user_id")
-        response = None
-        if Follower.objects.unfollow_page(page, user_id):
-            logger.info(f"User with id {user_id} unfollowed page with id {page.id}.")
-            response = Response({"message": f"You no longer following page {page.id}."})
-        else:
-            logger.info(
-                f"User with id {user_id} are not following page with id {page.id}."
-            )
-            response = Response({"message": f"You are not following page {page.id}."})
+            response = Response({"message": f"You aren't following page {page.id}."})
         return response
 
     @action(
