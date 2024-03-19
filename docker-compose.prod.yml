@@ -18,7 +18,7 @@ services:
       retries: 5
       start_period: 5s
     networks:
-      - innoter-prod-network
+      - innoter-network
   prod-celery:
     container_name: prod-celery
     build:
@@ -30,7 +30,7 @@ services:
       - .prod.env
     networks:
       - user-management-service_app-network
-      - innoter-prod-network
+      - innoter-network
     healthcheck:
       test: [ "CMD", "celery", "inspect", "ping" ]
       interval: 30s
@@ -55,7 +55,7 @@ services:
       prod-celery:
         condition: service_healthy
     networks:
-      - innoter-prod-network
+      - innoter-network
 
 volumes:
   mysql-data-prod:
@@ -63,5 +63,5 @@ volumes:
 networks:
   user-management-service_app-network:
     external: true
-  innoter-prod-network:
+  innoter-network:
     driver: bridge
