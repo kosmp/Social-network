@@ -17,8 +17,8 @@ class PydanticSettings(BaseSettings):
     celery_broker_url: str | None = None
     celery_result_backend: str | None = None
     logging_filename: str | None = None
-    logging_to_file_enabled: str | None = None
-    debug: str | None = None
+    logging_to_file_enabled: bool = False
+    debug: bool = False
     localstack_access_key_id: str | None = None
     localstack_secret_access_key: str | None = None
     localstack_endpoint_url: str | None = None
