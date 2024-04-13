@@ -1,0 +1,67 @@
+services:
+  prod-mysql:
+    image: mysql:8.2.0
+    command: --default-authentication-plugin=caching_sha2_password
+    volumes:
+      - mysql-data-prod:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - '3307:${MYSQL_PORT}'
+    init: true
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - innoter-network
+  prod-celery:
+    container_name: prod-celery
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    command: sh scripts/entry_celery.sh
+    env_file:
+      - .prod.env
+    networks:
+      - user-management-service_app-network
+      - innoter-network
+    healthcheck:
+      test: [ "CMD", "celery", "inspect", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  prod-innoter-app:
+    container_name: prod-innoter-app
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: sh scripts/entry_prod.sh
+    env_file:
+      - .prod.env
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8003:${APP_PORT}
+    init: true
+    depends_on:
+      prod-mysql:
+        condition: service_healthy
+      prod-celery:
+        condition: service_healthy
+    networks:
+      - innoter-network
+
+volumes:
+  mysql-data-prod:
+    driver: local
+networks:
+  user-management-service_app-network:
+    external: true
+  innoter-network:
+    driver: bridge

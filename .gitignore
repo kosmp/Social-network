@@ -40,16 +40,17 @@ cover/
 
 # Django stuff:
 *.log
+static/
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
 
 # Environments
-.env
+.prod.env
+.dev.env
+.test.env
 .venv
 env/
 venv/
